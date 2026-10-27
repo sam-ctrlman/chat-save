@@ -19,13 +19,13 @@ In Claude Code:
 
 | Typed | Saved to |
 |---|---|
-| `/chat-save` (session in `~/work`) | `~/Documents/work/conversations/<name>.txt` |
-| `/chat-save` (session in `~/work/project/my-app`) | `~/Documents/work/my-app/conversations/<name>.txt` |
-| `/chat-save ~/Documents` | `~/Documents/conversations/<name>.txt` |
-| `/chat-save ~/Documents/work2` | `~/Documents/work2/conversations/<name>.txt` |
+| `/chat-save` (session in `~/work`) | `~/Documents/work/conversations/<name>.md` |
+| `/chat-save` (session in `~/work/project/my-app`) | `~/Documents/work/my-app/conversations/<name>.md` |
+| `/chat-save ~/Documents` | `~/Documents/conversations/<name>.md` |
+| `/chat-save ~/Documents/work2` | `~/Documents/work2/conversations/<name>.md` |
 
 - **Name:** the session name (`/rename`), else the automatic title, else the session uuid, made into a slug.
-- **Never overwrites:** the 2nd save is `<name>-save-1.txt`, the 3rd `<name>-save-2.txt`, and so on.
+- **Never overwrites:** the 2nd save is `<name>-save-1.md`, the 3rd `<name>-save-2.md`, and so on.
 - **Content:** your messages (`❯`), Claude's replies (`⏺`), one line per tool call. System reminders,
   skill bodies, tool output and subagent messages are left out.
 

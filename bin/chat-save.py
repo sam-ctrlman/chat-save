@@ -12,8 +12,8 @@ Folder:
               ~/work/project/my-app -> work/my-app; "project"/"worktree" segments dropped)
   dest     -> <dest>/conversations/
 Name:
-  the session name (/rename), else the auto title, else the uuid -> <name>.txt,
-  then <name>-save-1.txt, <name>-save-2.txt, ... (never overwrites)
+  the session name (/rename), else the auto title, else the uuid -> <name>.md,
+  then <name>-save-1.md, <name>-save-2.md, ... (never overwrites)
 
 Exit codes: 0 ok, 1 transcript not found / write error, 2 usage.
 
@@ -48,6 +48,7 @@ CLAUDE_COMMAND_TARGET = Path.home() / ".claude" / "commands" / f"{TOOL_NAME}.md"
 PROJECTS_DIR = Path.home() / ".claude" / "projects"
 DOCUMENTS = Path.home() / "Documents"
 SKIP_SEGMENTS = {"project", "worktree"}
+EXT = ".md"
 UUID_RE = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 
 
@@ -101,11 +102,11 @@ def _folder(dest: str | None, cwd: Path) -> Path:
 
 
 def _free_name(folder: Path, name: str) -> Path:
-    target = folder / f"{name}.txt"
+    target = folder / f"{name}{EXT}"
     n = 0
     while target.exists():
         n += 1
-        target = folder / f"{name}-save-{n}.txt"
+        target = folder / f"{name}-save-{n}{EXT}"
     return target
 
 
@@ -276,7 +277,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         prog=TOOL_NAME,
         description=(
-            "Save a Claude Code conversation as text to <notes>/conversations/<name>[-save-N].txt. "
+            "Save a Claude Code conversation as text to <notes>/conversations/<name>[-save-N].md. "
             "Also: install, uninstall."
         ),
         epilog="exit codes: 0 ok, 1 transcript not found / write error, 2 usage",

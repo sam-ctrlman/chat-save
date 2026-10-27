@@ -1,5 +1,5 @@
 ---
-description: "Save this conversation as text to <notes>/conversations/<name>[-save-N].txt (auto folder + auto name)"
+description: "Save this conversation as text to <notes>/conversations/<name>[-save-N].md (auto folder + auto name)"
 argument-hint: "[dest folder, e.g. ~/Documents or ~/Documents/work2]"
 ---
 
