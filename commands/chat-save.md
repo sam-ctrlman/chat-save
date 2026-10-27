@@ -1,18 +1,16 @@
 ---
-description: "TODO: chat-save — describe what this slash command does"
-argument-hint: "[run|install|uninstall]"
+description: "Save this conversation as text to <notes>/conversations/<name>[-save-N].txt (auto folder + auto name)"
+argument-hint: "[dest folder, e.g. ~/Documents or ~/Documents/ws02]"
 ---
 
-Run `chat-save $ARGUMENTS` from the user's current directory using the Bash tool.
+Save the current conversation with the `chat-save` tool. Use exactly these Bash calls, nothing else:
 
-`chat-save` is a Python tool at `~/scripts/chat-save/bin/chat-save.py` (symlinked to `~/.local/bin/chat-save`). This slash command file is at `~/scripts/chat-save/commands/chat-save.md` (symlinked to `~/.claude/commands/chat-save.md`).
+1. `echo chat-save-$(date +%s%N)` and note the printed nonce.
+2. In a **separate** call: `grep -l <nonce> ~/.claude/projects/*/*.jsonl` (one path; its file name without `.jsonl` is the session uuid). Never guess the uuid from the newest file.
+3. `chat-save --session <uuid> --cwd "$PWD" $ARGUMENTS`
 
-Actions:
+Then show the user the `[ok] saved <path>` line (or the `[error]` line). Do NOT improvise steps the tool does not perform: the tool picks the folder and the name.
 
-- **`chat-save`** or **`chat-save run`** — TODO: the workflow this tool automates (not implemented yet — edit `cmd_run()` in the script).
-- **`chat-save install`** — create both symlinks (bin + Claude command). Idempotent.
-- **`chat-save uninstall`** — remove both symlinks. Idempotent.
-
-After it returns, surface the `[ok]` / `[error]` / `[notice]` log lines to the user. Do NOT improvise steps the tool does not perform — the tool owns its workflow.
-
-Pass through `$ARGUMENTS` verbatim. Valid args: `run`, `install`, `uninstall`, or empty (defaults to `run`).
+- No argument → `~/Documents/<workspace>[/<project>]/conversations/` (from the current directory, `project/` dropped).
+- `$ARGUMENTS` = a folder → `<folder>/conversations/`.
+- The name comes from the session name (/rename) or auto title; an existing file is never overwritten (`-save-1`, `-save-2`, …).
