@@ -1,6 +1,6 @@
 ---
 description: "Save this conversation as text to <notes>/conversations/<name>[-save-N].txt (auto folder + auto name)"
-argument-hint: "[dest folder, e.g. ~/Documents or ~/Documents/ws02]"
+argument-hint: "[dest folder, e.g. ~/Documents or ~/Documents/work2]"
 ---
 
 Save the current conversation with the `chat-save` tool. Use exactly these Bash calls, nothing else:

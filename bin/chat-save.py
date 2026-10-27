@@ -8,8 +8,8 @@ Usage:
   chat-save --help
 
 Folder:
-  no dest  -> ~/Documents/<workspace>[/<project>]/conversations/  (from --cwd: ~/ws01 -> ws01,
-              ~/ws01/project/dashboard -> ws01/dashboard; "project"/"worktree" segments dropped)
+  no dest  -> ~/Documents/<workspace>[/<project>]/conversations/  (from --cwd: ~/work -> work,
+              ~/work/project/my-app -> work/my-app; "project"/"worktree" segments dropped)
   dest     -> <dest>/conversations/
 Name:
   the session name (/rename), else the auto title, else the uuid -> <name>.txt,
