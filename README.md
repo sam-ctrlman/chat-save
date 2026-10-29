@@ -7,8 +7,8 @@ Built-in `/export` only takes a file name. `/chat-save` knows where your notes l
 ## Install
 
 ```sh
-git clone <remote-url> ~/scripts/chat-save
-python3 ~/scripts/chat-save/bin/chat-save.py install
+git clone <remote-url> ~/tools/projects/chat-save
+python3 ~/tools/projects/chat-save/bin/chat-save.py install
 ```
 
 After install, `chat-save` works in any shell and `/chat-save` works in Claude Code.
@@ -52,7 +52,7 @@ Exit codes: 0 ok, 1 transcript not found / write error, 2 usage.
 ## Layout
 
 ```
-~/scripts/chat-save/
+~/tools/projects/chat-save/
 ├── README.md
 ├── bin/chat-save.py
 └── commands/chat-save.md
