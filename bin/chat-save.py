@@ -139,6 +139,14 @@ def _tool_line(block: dict) -> str:
     return f"⏺ {block.get('name', 'tool')}({str(detail)[:100]})"
 
 
+def _start_dir(entries: list[dict], fallback: Path) -> Path:
+    # claude --resume only finds a chat from the folder it was STARTED in: first "cwd" of the transcript
+    for e in entries:
+        if e.get("cwd"):
+            return Path(e["cwd"])
+    return fallback
+
+
 def _host() -> str:
     try:
         out = subprocess.run(["hostnamectl", "hostname"], capture_output=True, text=True, timeout=5)
@@ -156,7 +164,7 @@ def _render(entries: list[dict], title: str, session: str, cwd: Path, anon: bool
         f"Saved: {datetime.now():%Y-%m-%d %H:%M}",
     ]
     if not anon:
-        out += [f"Directory: {cwd}", f"Session: {session}", f"Host: {_host()}"]
+        out += [f"Directory: {_start_dir(entries, cwd)}", f"Session: {session}", f"Host: {_host()}"]
     out.append("")
     for e in entries:
         if e.get("type") not in ("user", "assistant"):
