@@ -2,7 +2,7 @@
 """chat-save — save a Claude Code conversation as readable text, auto folder + auto name.
 
 Usage:
-  chat-save --session <uuid> [--cwd <dir>] [--dry-run] [dest]
+  chat-save --session <uuid> [--cwd <dir>] [--dry-run] [-n] [-a] [dest]
   chat-save install       # symlink into ~/.local/bin + ~/.claude/commands
   chat-save uninstall     # remove those symlinks
   chat-save --help
@@ -27,6 +27,8 @@ import argparse
 import json
 import re
 import shutil
+import socket
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -137,14 +139,25 @@ def _tool_line(block: dict) -> str:
     return f"⏺ {block.get('name', 'tool')}({str(detail)[:100]})"
 
 
-def _render(entries: list[dict], title: str, session: str, cwd: Path) -> str:
+def _host() -> str:
+    try:
+        out = subprocess.run(["hostnamectl", "hostname"], capture_output=True, text=True, timeout=5)
+        if out.returncode == 0 and out.stdout.strip():
+            return out.stdout.strip()
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return socket.gethostname()
+
+
+def _render(entries: list[dict], title: str, session: str, cwd: Path, anon: bool = False) -> str:
+    # -a/--anon (rule ~/.claude/CLAUDE.md -> Note provenance): no Directory / Session / Host lines
     out = [
         f"Conversation: {title}",
         f"Saved: {datetime.now():%Y-%m-%d %H:%M}",
-        f"Directory: {cwd}",
-        f"Session: {session}",
-        "",
     ]
+    if not anon:
+        out += [f"Directory: {cwd}", f"Session: {session}", f"Host: {_host()}"]
+    out.append("")
     for e in entries:
         if e.get("type") not in ("user", "assistant"):
             continue
@@ -162,7 +175,8 @@ def _render(entries: list[dict], title: str, session: str, cwd: Path) -> str:
     return "\n".join(out).rstrip() + "\n"
 
 
-def cmd_run(session: str | None, cwd: str | None, dest: str | None, dry_run: bool, stamp: bool = True) -> int:
+def cmd_run(session: str | None, cwd: str | None, dest: str | None, dry_run: bool, stamp: bool = True,
+            anon: bool = False) -> int:
     if not session:
         die("usage: chat-save --session <uuid> [--cwd <dir>] [--dry-run] [dest]", code=2)
     transcript = _find_transcript(session)
@@ -176,7 +190,7 @@ def cmd_run(session: str | None, cwd: str | None, dest: str | None, dry_run: boo
         return 0
     folder.mkdir(parents=True, exist_ok=True)
     try:
-        target.write_text(_render(entries, title, session, cwd_path))
+        target.write_text(_render(entries, title, session, cwd_path, anon))
     except OSError as exc:
         die(f"cannot write {target}: {exc}")
     log("ok", f"saved {target}")
@@ -289,9 +303,10 @@ def main() -> int:
     parser.add_argument("--cwd", help="directory the session runs in (default: current directory)")
     parser.add_argument("--dry-run", action="store_true", help="print the target path, write nothing")
     parser.add_argument("-n", "--no-stamp", action="store_true", help="no YYYY-MM-DD-HHMMSS- prefix: <name>.md")
+    parser.add_argument("-a", "--anon", action="store_true", help="leave out Directory / Session / Host (a file to share)")
     parser.add_argument("dest", nargs="?", help="base folder; the file goes to <dest>/conversations/")
     args = parser.parse_args()
-    return cmd_run(args.session, args.cwd, args.dest, args.dry_run, stamp=not args.no_stamp)
+    return cmd_run(args.session, args.cwd, args.dest, args.dry_run, stamp=not args.no_stamp, anon=args.anon)
 
 
 if __name__ == "__main__":

@@ -6,8 +6,9 @@ Where work stopped and what's next. Update at the end of every session. Cite boa
 <!-- created by /memlayout 2026-10-30 -->
 
 ## Now
-- Working on: TOOL-MOVE-E — tool moved into the tools workspace (`~/tools/projects/chat-save`), project docs added.
-- Stopped at: stage 0 docs.
+- Done 2026-11-03: TOOL-CSAVE-PROV (from WS-NOTE-PROV) — header gets `Host:` (hostnamectl hostname); `-a`/`--anon` leaves out
+  Directory / Session / Host (rule `~/.claude/CLAUDE.md` → Note provenance).
+- Stopped at: committed locally; this repo has no git remote yet (push parked on the board).
 
 ## Next
 - see `~/tools/docs/BOARD.md` rows `TOOL-CSAVE-*`

@@ -1,6 +1,6 @@
 ---
 description: "Save this conversation as text to <notes>/conversations/<YYYY-MM-DD-HHMMSS>-<name>[-save-N].md (auto folder + auto name; -n = no date-time)"
-argument-hint: "[-n|--no-stamp] [dest folder, e.g. ~/Documents or ~/Documents/work2]"
+argument-hint: "[-n|--no-stamp] [-a|--anon] [dest folder, e.g. ~/Documents or ~/Documents/work2]"
 ---
 
 Save the current conversation with the `chat-save` tool. Use exactly these Bash calls, nothing else:
