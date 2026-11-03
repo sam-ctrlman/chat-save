@@ -101,7 +101,10 @@ def _folder(dest: str | None, cwd: Path) -> Path:
     return DOCUMENTS.joinpath(*parts, "conversations")
 
 
-def _free_name(folder: Path, name: str) -> Path:
+def _free_name(folder: Path, name: str, stamp: bool = True) -> Path:
+    # default name: YYYY-MM-DD-HHMMSS-<name> (global "Note filenames" rule); --no-stamp -> <name>
+    if stamp:
+        name = f"{datetime.now():%Y-%m-%d-%H%M%S}-{name}"
     target = folder / f"{name}{EXT}"
     n = 0
     while target.exists():
@@ -159,7 +162,7 @@ def _render(entries: list[dict], title: str, session: str, cwd: Path) -> str:
     return "\n".join(out).rstrip() + "\n"
 
 
-def cmd_run(session: str | None, cwd: str | None, dest: str | None, dry_run: bool) -> int:
+def cmd_run(session: str | None, cwd: str | None, dest: str | None, dry_run: bool, stamp: bool = True) -> int:
     if not session:
         die("usage: chat-save --session <uuid> [--cwd <dir>] [--dry-run] [dest]", code=2)
     transcript = _find_transcript(session)
@@ -167,7 +170,7 @@ def cmd_run(session: str | None, cwd: str | None, dest: str | None, dry_run: boo
     cwd_path = Path(cwd).expanduser() if cwd else Path.cwd()
     title = _title(entries, session)
     folder = _folder(dest, cwd_path)
-    target = _free_name(folder, title)
+    target = _free_name(folder, title, stamp)
     if dry_run:
         log("notice", f"dry run — would save {target}")
         return 0
@@ -277,7 +280,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         prog=TOOL_NAME,
         description=(
-            "Save a Claude Code conversation as text to <notes>/conversations/<name>[-save-N].md. "
+            "Save a Claude Code conversation as text to <notes>/conversations/<YYYY-MM-DD-HHMMSS>-<name>[-save-N].md. "
             "Also: install, uninstall."
         ),
         epilog="exit codes: 0 ok, 1 transcript not found / write error, 2 usage",
@@ -285,9 +288,10 @@ def main() -> int:
     parser.add_argument("--session", help="session uuid (the transcript file name)")
     parser.add_argument("--cwd", help="directory the session runs in (default: current directory)")
     parser.add_argument("--dry-run", action="store_true", help="print the target path, write nothing")
+    parser.add_argument("-n", "--no-stamp", action="store_true", help="no YYYY-MM-DD-HHMMSS- prefix: <name>.md")
     parser.add_argument("dest", nargs="?", help="base folder; the file goes to <dest>/conversations/")
     args = parser.parse_args()
-    return cmd_run(args.session, args.cwd, args.dest, args.dry_run)
+    return cmd_run(args.session, args.cwd, args.dest, args.dry_run, stamp=not args.no_stamp)
 
 
 if __name__ == "__main__":
