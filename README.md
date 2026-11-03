@@ -55,5 +55,5 @@ Exit codes: 0 ok, 1 transcript not found / write error, 2 usage.
 ~/tools/projects/chat-save/
 ├── README.md
 ├── bin/chat-save.py
-└── commands/chat-save.md
+└── skills/chat-save/SKILL.md
 ```
