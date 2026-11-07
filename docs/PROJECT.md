@@ -3,7 +3,7 @@
 <!-- created by /memlayout 2026-10-30 · board prefix TOOL-CSAVE · workspace tools -->
 
 ## Goal
-Saves a Claude Code conversation as Markdown to `<notes>/conversations/<name>[-save-N].md`, folder and name picked automatically.
+Export Claude Code sessions to clean Markdown transcripts with auto-naming, project folder routing, provenance headers, and --anon mode.
 
 ## Users
 A developer who runs Claude Code on their own machine and wants this step done the same way every time.

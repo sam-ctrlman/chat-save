@@ -8,7 +8,7 @@ Where work stopped and what's next. Update at the end of every session. Cite boa
 ## Now
 - Done 2026-11-03: TOOL-CSAVE-PROV (from WS-NOTE-PROV) — header gets `Host:` (hostnamectl hostname); `-a`/`--anon` leaves out
   Directory / Session / Host (rule `~/.claude/CLAUDE.md` → Note provenance).
-- Stopped at: committed locally; this repo has no git remote yet (push parked on the board).
+- Stopped at: published on backup remote and GitHub (TOOL-GH5, TOOL-AUTHOR-SCRUB).
 
 ## Next
 - see `~/tools/docs/BOARD.md` rows `TOOL-CSAVE-*`
