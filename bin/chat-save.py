@@ -8,8 +8,10 @@ Usage:
   chat-save --help
 
 Folder:
-  no dest  -> ~/Documents/<workspace>[/<project>]/conversations/  (from --cwd: ~/work -> work,
-              ~/work/project/my-app -> work/my-app; "project"/"worktree" segments dropped)
+  no dest  -> ~/Documents/<workspace>[/<project>]/conversations/  (from the chat start folder =
+              first transcript cwd, --cwd only if none: ~/work -> work, ~/work/project/my-app ->
+              work/my-app; "project"/"worktree" segments dropped; a start folder under ~/Documents
+              is not doubled: ~/Documents/x -> ~/Documents/x/conversations/)
   dest     -> <dest>/conversations/
 Name:
   the session name (/rename), else the auto title, else the uuid -> <name>.md,
@@ -100,6 +102,8 @@ def _folder(dest: str | None, cwd: Path) -> Path:
         rel = cwd.resolve().relative_to(Path.home())
     except ValueError:
         rel = Path()
+    if rel.parts[:1] == ("Documents",):  # start folder already under ~/Documents: don't add it again
+        rel = Path(*rel.parts[1:])
     parts = [p for p in rel.parts if p not in SKIP_SEGMENTS][:2]
     return DOCUMENTS.joinpath(*parts, "conversations")
 
@@ -192,7 +196,7 @@ def cmd_run(session: str | None, cwd: str | None, dest: str | None, dry_run: boo
     entries = _read_entries(transcript)
     cwd_path = Path(cwd).expanduser() if cwd else Path.cwd()
     title = _title(entries, session)
-    folder = _folder(dest, cwd_path)
+    folder = _folder(dest, _start_dir(entries, cwd_path))  # start folder wins; --cwd only as fallback
     target = _free_name(folder, title, stamp)
     if dry_run:
         log("notice", f"dry run — would save {target}")
@@ -339,7 +343,7 @@ def main() -> int:
         epilog="exit codes: 0 ok, 1 transcript not found / write error, 2 usage",
     )
     parser.add_argument("--session", help="session uuid (the transcript file name)")
-    parser.add_argument("--cwd", help="directory the session runs in (default: current directory)")
+    parser.add_argument("--cwd", help="fallback folder when the transcript has no cwd (default: current directory)")
     parser.add_argument("--dry-run", action="store_true", help="print the target path, write nothing")
     parser.add_argument("-n", "--no-stamp", action="store_true", help="no YYYY-MM-DD-HHMMSS- prefix: <name>.md")
     parser.add_argument("-a", "--anon", action="store_true", help="leave out Directory / Session / Host (a file to share)")

@@ -9,7 +9,7 @@ Claude Code's built-in `/export` command requires manually typing a destination 
 ## Why Use `chat-save`?
 
 - **Automatic Title & Timestamp Naming:** Picks the session name (`/rename`), automatic AI title, or session UUID and saves as `<YYYY-MM-DD-HHMMSS>-<slug>.md` (or `<slug>.md` with `-n` / `--no-stamp`).
-- **Smart Workspace & Project Routing:** Automatically derives the output folder from your session's working directory (`~/Documents/<workspace>/<project>/conversations/` or your project's configured `notes-dir`).
+- **Smart Workspace & Project Routing:** Automatically derives the output folder from the folder your session started in (first `cwd` in the transcript; `~/Documents/<workspace>/<project>/conversations/` or your project's configured `notes-dir`).
 - **Collision-Safe Saving:** Never overwrites an existing transcript — subsequent saves append `-save-1.md`, `-save-2.md`, and so on.
 - **Readable Markdown Output:** Keeps your prompts (`❯`), assistant responses (`⏺`), and compact 1-line tool summaries (`⏺ Tool(...)`) while stripping `<system-reminder>` blocks, sidechains, compact summaries, and raw tool output blobs.
 - **Anonymous Sharing Mode (`-a` / `--anon`):** Strips local provenance headers (`Directory:`, `Session:`, `Host:`) when exporting a transcript to share externally.
@@ -70,11 +70,12 @@ chat-save uninstall
 
 ### Inside Claude Code (`/chat-save`)
 
-| Command Typed in Claude Code | Session Working Directory | Saved Destination Path |
+| Command Typed in Claude Code | Session Start Folder | Saved Destination Path |
 | :--- | :--- | :--- |
 | `/chat-save` | `~/work` | `~/Documents/work/conversations/<YYYY-MM-DD-HHMMSS>-<name>.md` |
 | `/chat-save` | `~/work/project/my-app` | `~/Documents/work/my-app/conversations/<YYYY-MM-DD-HHMMSS>-<name>.md` |
 | `/chat-save -n` | `~/work/project/my-app` | `~/Documents/work/my-app/conversations/<name>.md` |
+| `/chat-save` | `~/Documents/stepbooks` | `~/Documents/stepbooks/conversations/<YYYY-MM-DD-HHMMSS>-<name>.md` (no doubled `Documents/`) |
 | `/chat-save -a` | `~/work/project/my-app` | Same path, without `Directory` / `Session` / `Host` header lines |
 | `/chat-save ~/Documents` | *Any* | `~/Documents/conversations/<YYYY-MM-DD-HHMMSS>-<name>.md` |
 | `/chat-save ~/Documents/archive` | *Any* | `~/Documents/archive/conversations/<YYYY-MM-DD-HHMMSS>-<name>.md` |
@@ -94,7 +95,7 @@ chat-save --session <uuid> [--cwd <dir>] [--dry-run] [-n|--no-stamp] [-a|--anon]
 | Option / Action | Description |
 | :--- | :--- |
 | `--session <uuid>` | **Required for CLI run.** The Claude Code session UUID (matching `<uuid>.jsonl` under `~/.claude/projects/*/`). |
-| `--cwd <dir>` | Working directory used to derive `<workspace>/<project>` when `[dest]` is omitted (defaults to `$PWD`; `Directory:` header uses the transcript's initial start folder). |
+| `--cwd <dir>` | Fallback folder used to derive `<workspace>/<project>` only when the transcript records no start `cwd` (defaults to `$PWD`). The folder and the `Directory:` header both come from the transcript's start folder. |
 | `--dry-run` | Print the resolved destination file path (`[notice] dry run — would save <path>`) without writing anything. |
 | `-n`, `--no-stamp` | Omit the `YYYY-MM-DD-HHMMSS-` date-time prefix from the filename (`<name>.md`). |
 | `-a`, `--anon` | Omit `Directory:`, `Session:`, and `Host:` provenance lines from the Markdown header for external sharing. |

@@ -6,6 +6,9 @@ Where work stopped and what's next. Update at the end of every session. Cite boa
 <!-- created by /memlayout 2026-10-30 -->
 
 ## Now
+- Done 2026-11-11: TOOL-CSAVE-STARTDIR — folder comes from the chat start folder (first transcript `cwd`), `--cwd`
+  only as fallback; a start folder under `~/Documents` no longer gets `Documents/` again; skill drops `--cwd "$PWD"`;
+  first tests: `python3 -m unittest discover -s tests -v`. Parked: TOOL-CSAVE-STARTDIR-PUSH, TOOL-CSAVE-NOTESDIR.
 - Done 2026-11-03: TOOL-CSAVE-PROV (from WS-NOTE-PROV) — header gets `Host:` (hostnamectl hostname); `-a`/`--anon` leaves out
   Directory / Session / Host (rule `~/.claude/CLAUDE.md` → Note provenance).
 - Stopped at: published on backup remote and GitHub (TOOL-GH5, TOOL-AUTHOR-SCRUB).
