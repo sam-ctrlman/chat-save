@@ -6,6 +6,7 @@ Where work stopped and what's next. Update at the end of every session. Cite boa
 <!-- created by /memlayout 2026-10-30 -->
 
 ## Now
+- Done 2026-11-18: TOOL-CSAVE-AGY — pluggable multi-agent adapter registry (`claude` + `antigravity` JSONL `transcript_full.jsonl`, extensible for `codex`/`qwen-code`/`kimi`/`deepseek`/`glm`), `Agent: <id> (<model>)` header (omitted under `--anon`, D2=a), `--title` + first-prompt slug fallback and workspace start-dir inference (D1=a); tests 13/13 pass (`python3 -m unittest discover -s tests -v`).
 - Done 2026-11-11: TOOL-CSAVE-STARTDIR — folder comes from the chat start folder (first transcript `cwd`), `--cwd`
   only as fallback; a start folder under `~/Documents` no longer gets `Documents/` again; skill drops `--cwd "$PWD"`;
   first tests: `python3 -m unittest discover -s tests -v`. Parked: TOOL-CSAVE-STARTDIR-PUSH, TOOL-CSAVE-NOTESDIR.

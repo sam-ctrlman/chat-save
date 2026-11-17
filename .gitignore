@@ -16,6 +16,7 @@ secrets/
 id_rsa*
 id_ed25519*
 
-# workspace: Claude memory + notes stay local (never tracked)
+# workspace: AI memory + notes stay local (never tracked)
 .claude/
+.agents/
 docs/notes/

@@ -3,10 +3,10 @@
 <!-- created by /memlayout 2026-10-30 · board prefix TOOL-CSAVE · workspace tools -->
 
 ## Goal
-Export Claude Code sessions to clean Markdown transcripts with auto-naming, project folder routing, provenance headers, and --anon mode.
+Export Claude Code and Antigravity sessions (with pluggable multi-agent adapters) to clean Markdown transcripts with auto-naming, project folder routing, provenance headers, and --anon mode.
 
 ## Users
-A developer who runs Claude Code on their own machine and wants this step done the same way every time.
+A developer who runs AI coding agents on their own machine and wants session transcripts saved the same way every time.
 
 ## Scope
 - In: the commands in `README.md`, `chat-save install` / `uninstall` (symlinks onto PATH and into `~/.claude`).
